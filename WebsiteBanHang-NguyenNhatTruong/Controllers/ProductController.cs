@@ -2,6 +2,7 @@
 using WebsiteBanHang_NguyenNhatTruong.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
 
 namespace WebsiteBanHang_NguyenNhatTruong.Controllers
 {
@@ -17,14 +18,28 @@ namespace WebsiteBanHang_NguyenNhatTruong.Controllers
             _categoryRepository = categoryRepository;
         }
 
-        // Hiển thị danh sách sản phẩm
+        // Ai cũng xem được sản phẩm
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var products = await _productRepository.GetAllAsync();
             return View(products);
         }
 
-        // Hiển thị form thêm sản phẩm
+        // Xem chi tiết cũng không cần login
+        [AllowAnonymous]
+        public async Task<IActionResult> Display(int id)
+        {
+            var product = await _productRepository.GetByIdAsync(id);
+
+            if (product == null)
+                return NotFound();
+
+            return View(product);
+        }
+
+        // Phải đăng nhập mới thêm được
+        [Authorize]
         public async Task<IActionResult> Add()
         {
             var categories = await _categoryRepository.GetAllAsync();
@@ -32,8 +47,8 @@ namespace WebsiteBanHang_NguyenNhatTruong.Controllers
             return View();
         }
 
-        // Xử lý thêm sản phẩm
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Add(Product product, IFormFile imageUrl)
         {
             if (ModelState.IsValid)
@@ -53,31 +68,8 @@ namespace WebsiteBanHang_NguyenNhatTruong.Controllers
             return View(product);
         }
 
-        // Hàm lưu ảnh
-        private async Task<string> SaveImage(IFormFile image)
-        {
-            var savePath = Path.Combine("wwwroot/images", image.FileName);
-
-            using (var fileStream = new FileStream(savePath, FileMode.Create))
-            {
-                await image.CopyToAsync(fileStream);
-            }
-
-            return "/images/" + image.FileName;
-        }
-
-        // Hiển thị chi tiết sản phẩm
-        public async Task<IActionResult> Display(int id)
-        {
-            var product = await _productRepository.GetByIdAsync(id);
-
-            if (product == null)
-                return NotFound();
-
-            return View(product);
-        }
-
-        // Hiển thị form cập nhật sản phẩm
+        // Update cần login
+        [Authorize]
         public async Task<IActionResult> Update(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
@@ -91,8 +83,8 @@ namespace WebsiteBanHang_NguyenNhatTruong.Controllers
             return View(product);
         }
 
-        // Xử lý cập nhật sản phẩm
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> Update(int id, Product product, IFormFile imageUrl)
         {
             ModelState.Remove("ImageUrl");
@@ -126,7 +118,8 @@ namespace WebsiteBanHang_NguyenNhatTruong.Controllers
             return View(product);
         }
 
-        // Hiển thị form xác nhận xóa
+        // Xóa cần login
+        [Authorize]
         public async Task<IActionResult> Delete(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
@@ -137,12 +130,25 @@ namespace WebsiteBanHang_NguyenNhatTruong.Controllers
             return View(product);
         }
 
-        // Xử lý xóa sản phẩm
         [HttpPost, ActionName("Delete")]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _productRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
+        }
+
+        // Hàm lưu ảnh
+        private async Task<string> SaveImage(IFormFile image)
+        {
+            var savePath = Path.Combine("wwwroot/images", image.FileName);
+
+            using (var fileStream = new FileStream(savePath, FileMode.Create))
+            {
+                await image.CopyToAsync(fileStream);
+            }
+
+            return "/images/" + image.FileName;
         }
     }
 }

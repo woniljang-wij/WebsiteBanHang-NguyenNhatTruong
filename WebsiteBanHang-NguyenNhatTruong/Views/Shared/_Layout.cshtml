@@ -11,7 +11,7 @@
 
 <body>
 
-    <!-- BANNER VÀNG -->
+    <!-- BANNER -->
     <div class="top-banner">
         🔥 SIÊU SALE HÔM NAY - GIẢM ĐẾN 50% | MIỄN PHÍ GIAO HÀNG TOÀN QUỐC 🔥
     </div>
@@ -31,7 +31,6 @@
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#navbarNav">
-
                     <span class="navbar-toggler-icon"></span>
                 </button>
 
@@ -55,6 +54,8 @@
                             </a>
                         </li>
 
+                        <partial name="_LoginPartial" />
+
                     </ul>
 
                 </div>
@@ -63,14 +64,12 @@
         </nav>
     </header>
 
-
-    <!-- NỘI DUNG TRANG -->
+    <!-- NỘI DUNG -->
     <div class="container mt-4">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
-
 
     <!-- FOOTER -->
     <footer class="main-footer">
@@ -108,7 +107,6 @@
         </div>
 
     </footer>
-
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
