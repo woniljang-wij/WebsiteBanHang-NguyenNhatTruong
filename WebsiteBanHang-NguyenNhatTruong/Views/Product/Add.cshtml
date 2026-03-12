@@ -1,0 +1,94 @@
+﻿@model WebsiteBanHang_NguyenNhatTruong.Models.Product
+
+@{
+    ViewData["Title"] = "Thêm sản phẩm";
+}
+
+<div class="container mt-4">
+
+    <h2 class="mb-4">➕ Thêm sản phẩm</h2>
+
+    <div class="card shadow-sm p-4">
+
+        <form asp-action="Add" enctype="multipart/form-data">
+
+            <div class="mb-3">
+                <label class="form-label">Tên sản phẩm</label>
+                <input asp-for="Name" class="form-control" placeholder="Nhập tên sản phẩm" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Giá (VNĐ)</label>
+                <input asp-for="Price" class="form-control" placeholder="Ví dụ: 1000000" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Mô tả sản phẩm</label>
+                <textarea asp-for="Description" class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Danh mục</label>
+
+                <select asp-for="CategoryId"
+                        asp-items="ViewBag.Categories"
+                        class="form-control">
+                </select>
+
+            </div>
+
+            <div class="mb-3">
+
+                <label class="form-label">Hình ảnh sản phẩm</label>
+
+                <input type="file"
+                       name="imageUrl"
+                       class="form-control"
+                       onchange="previewImage(event)" />
+
+            </div>
+
+            <div class="mb-3 text-center">
+
+                <img id="preview"
+                     style="max-height:200px; display:none; border-radius:10px;" />
+
+            </div>
+
+            <div class="d-flex gap-2">
+
+                <button type="submit" class="btn btn-success">
+                    💾 Lưu sản phẩm
+                </button>
+
+                <a asp-action="Index" class="btn btn-secondary">
+                    ← Quay lại
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    function previewImage(event){
+
+        const reader = new FileReader();
+
+        reader.onload = function(){
+            const img = document.getElementById("preview");
+            img.src = reader.result;
+            img.style.display = "block";
+        }
+
+        reader.readAsDataURL(event.target.files[0]);
+    }
+
+</script>

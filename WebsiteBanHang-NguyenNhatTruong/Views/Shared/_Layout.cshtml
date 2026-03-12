@@ -1,0 +1,120 @@
+﻿<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Website Bán Hàng</title>
+
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+
+<body>
+
+    <!-- BANNER VÀNG -->
+    <div class="top-banner">
+        🔥 SIÊU SALE HÔM NAY - GIẢM ĐẾN 50% | MIỄN PHÍ GIAO HÀNG TOÀN QUỐC 🔥
+    </div>
+
+    <!-- NAVBAR -->
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-dark bg-dark shadow">
+            <div class="container">
+
+                <a class="navbar-brand fw-bold text-warning"
+                   asp-controller="Home"
+                   asp-action="Index">
+                    🛒 Shop Công Nghệ
+                </a>
+
+                <button class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNav">
+
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarNav">
+
+                    <ul class="navbar-nav ms-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="Index">
+                                Trang chủ
+                            </a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link"
+                               asp-controller="Home"
+                               asp-action="Privacy">
+                                Chính sách
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </div>
+
+            </div>
+        </nav>
+    </header>
+
+
+    <!-- NỘI DUNG TRANG -->
+    <div class="container mt-4">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+
+    <!-- FOOTER -->
+    <footer class="main-footer">
+
+        <div class="container footer-container">
+
+            <div class="footer-col">
+                <h4>Website Bán Hàng</h4>
+                <p>
+                    Hệ thống bán sản phẩm công nghệ chất lượng cao.
+                    Giá tốt - Chính hãng - Bảo hành đầy đủ.
+                </p>
+            </div>
+
+            <div class="footer-col">
+                <h4>Liên kết</h4>
+                <ul>
+                    <li><a href="/">Trang chủ</a></li>
+                    <li><a href="#">Sản phẩm</a></li>
+                    <li><a href="#">Liên hệ</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-col">
+                <h4>Liên hệ</h4>
+                <p>📧 support@shop.com</p>
+                <p>📞 0900 000 000</p>
+                <p>📍 Hồ Chí Minh</p>
+            </div>
+
+        </div>
+
+        <div class="footer-bottom">
+            © 2026 WebsiteBanHang_NguyenNhatTruong
+        </div>
+
+    </footer>
+
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+</body>
+</html>

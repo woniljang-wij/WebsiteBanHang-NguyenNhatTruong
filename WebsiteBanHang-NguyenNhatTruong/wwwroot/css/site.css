@@ -1,0 +1,155 @@
+﻿html {
+    font-size: 14px;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+    box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    margin-bottom: 60px;
+}
+
+/* Nút thêm sản phẩm animation */
+
+.btn-add-product {
+    position: relative;
+    display: inline-block;
+    padding: 10px 22px;
+    font-weight: 600;
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    background: #198754;
+    overflow: hidden;
+}
+
+    /* vệt sáng chạy */
+    .btn-add-product::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: -75%;
+        width: 50%;
+        height: 100%;
+        background: linear-gradient( 120deg, transparent, rgba(255,255,255,0.8), transparent );
+        transform: skewX(-25deg);
+        animation: shine 2.5s infinite;
+    }
+
+@keyframes shine {
+    0% {
+        left: -75%;
+    }
+
+    100% {
+        left: 125%;
+    }
+}
+
+/* hover */
+.btn-add-product:hover {
+    transform: scale(1.05);
+}
+
+/* ===== Banner vàng ===== */
+
+.top-banner {
+    background: linear-gradient(90deg,#FFD700,#FFC107,#FFD700);
+    text-align: center;
+    font-weight: bold;
+    padding: 10px;
+    font-size: 16px;
+    color: #000;
+}
+
+/* ===== Footer ===== */
+
+.main-footer {
+    background: #000;
+    color: #FFD700;
+    padding: 40px 0;
+    margin-top: 60px;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.footer-col {
+    width: 30%;
+}
+
+    .footer-col h4 {
+        margin-bottom: 15px;
+    }
+
+    .footer-col ul {
+        list-style: none;
+        padding: 0;
+    }
+
+        .footer-col ul li {
+            margin-bottom: 8px;
+        }
+
+    .footer-col a {
+        color: #FFD700;
+        text-decoration: none;
+    }
+
+        .footer-col a:hover {
+            text-decoration: underline;
+        }
+
+.footer-bottom {
+    text-align: center;
+    border-top: 1px solid #333;
+    margin-top: 25px;
+    padding-top: 15px;
+}
+
+/* CARD VIỀN RGB CHẠY */
+
+.product-card {
+    position: relative;
+    border-radius: 12px;
+    padding: 3px;
+    background: linear-gradient( 90deg, red, orange, yellow, lime, cyan, blue, violet, red );
+    background-size: 400%;
+    animation: borderMove 6s linear infinite;
+}
+
+    /* nền card */
+    .product-card .card-body,
+    .product-card img {
+        background: white;
+    }
+
+.product-card {
+    border: none;
+}
+
+/* animation */
+@keyframes borderMove {
+    0% {
+        background-position: 0%;
+    }
+
+    100% {
+        background-position: 400%;
+    }
+}
