@@ -3,16 +3,22 @@ using Microsoft.EntityFrameworkCore;
 using WebsiteBanHang_NguyenNhatTruong.Data;
 using WebsiteBanHang_NguyenNhatTruong.Repositories;
 using WebsiteBanHang_NguyenNhatTruong.Models;
+using Microsoft.AspNetCore.Identity.UI.Services;
+using WebsiteBanHang_NguyenNhatTruong.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
-builder.Services.AddControllersWithViews();
 
-// Cấu hình Entity Framework Core
+// ================= ADD SERVICES =================
+
+builder.Services.AddControllersWithViews();
+builder.Services.AddRazorPages();
+
+// Entity Framework
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
+// Identity + Role
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {
     options.SignIn.RequireConfirmedAccount = false;
 
@@ -22,22 +28,30 @@ builder.Services.AddDefaultIdentity<ApplicationUser>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 3;
 })
-.AddEntityFrameworkStores<ApplicationDbContext>();
+.AddEntityFrameworkStores<ApplicationDbContext>()
+.AddDefaultTokenProviders();
 
-builder.Services.AddRazorPages();
+// Trang AccessDenied
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.AccessDeniedPath = "/Product/AccessDenied";
+});
 
-// Add services to the container.
+// Email
+builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
+// Repository
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
+// ================= MIDDLEWARE =================
+
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
@@ -47,13 +61,50 @@ app.UseStaticFiles();
 app.UseRouting();
 
 app.UseAuthentication();
-
 app.UseAuthorization();
 
 app.MapRazorPages();
 
+
+// ================= DEFAULT ROUTE =================
+
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Product}/{action=Index}/{id?}");
+
+
+// ================= CREATE ADMIN =================
+
+using (var scope = app.Services.CreateScope())
+{
+    var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+    var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+    string roleName = "Admin";
+
+    if (!await roleManager.RoleExistsAsync(roleName))
+    {
+        await roleManager.CreateAsync(new IdentityRole(roleName));
+    }
+
+    string email = "admin@gmail.com";
+    string password = "123456";
+
+    if (await userManager.FindByEmailAsync(email) == null)
+    {
+        var user = new ApplicationUser
+        {
+            UserName = email,
+            Email = email,
+            FullName = "Administrator",
+            Address = "Admin System",
+            Age = "25",
+            EmailConfirmed = true
+        };
+
+        await userManager.CreateAsync(user, password);
+        await userManager.AddToRoleAsync(user, roleName);
+    }
+}
 
 app.Run();

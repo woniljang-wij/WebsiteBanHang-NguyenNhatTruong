@@ -41,11 +41,12 @@
 
                 <div class="mt-4 d-flex gap-2">
 
-                    <a asp-action="Update"
-                       asp-route-id="@Model.Id"
-                       class="btn btn-warning">
-                        ✏️ Sửa
-                    </a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-warning">
+                            ✏ Sửa
+                        </a>
+                    }
 
                     <a asp-action="Index"
                        class="btn btn-secondary">

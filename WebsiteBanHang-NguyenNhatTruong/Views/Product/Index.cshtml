@@ -9,9 +9,12 @@
 
     <div class="d-flex justify-content-end mb-4">
 
-        <a asp-action="Add" class="btn-add-product">
-            + Thêm sản phẩm
-        </a>
+        @if (User.IsInRole("Admin"))
+        {
+            <a asp-action="Add" class="btn-add-product">
+                + Thêm sản phẩm
+            </a>
+        }
 
     </div>
 
@@ -21,48 +24,65 @@
         {
             <div class="col-md-3 mb-4">
 
-                <div class="card shadow-sm h-100 product-card">
+                <div class="card product-card h-100">
 
-                    <img src="@item.ImageUrl"
-                         class="card-img-top product-img" />
+                    <div class="product-img-box">
+
+                        <img src="@item.ImageUrl"
+                             class="card-img-top product-img" />
+
+                        @* BADGE TÌNH TRẠNG *@
+                        @if (item.Quantity == 0)
+                        {
+                            <span class="badge-out">HẾT HÀNG</span>
+                        }
+                        else if (item.Quantity < 5)
+                        {
+                            <span class="badge-low">SẮP HẾT</span>
+                        }
+
+                    </div>
 
                     <div class="card-body">
 
-                        <h5 class="card-title product-title">
+                        <h5 class="product-title">
                             @item.Name
                         </h5>
 
-                        <h6 class="text-danger">
-
+                        <h5 class="product-price">
                             @CurrencyHelper.ToVnd(item.Price)
+                        </h5>
 
-                        </h6>
-
-                        <p class="text-muted">
-
-                            Danh mục: @item.Category?.Name
-
+                        <p class="product-quantity">
+                            Số lượng: @item.Quantity
                         </p>
 
-                        <div class="d-flex gap-2">
+                        <p class="product-category">
+                            Danh mục: @item.Category?.Name
+                        </p>
+
+                        <div class="d-flex gap-2 mt-3">
 
                             <a asp-action="Display"
                                asp-route-id="@item.Id"
                                class="btn btn-outline-primary btn-sm">
-                                Xem
+                                👁 Xem
                             </a>
 
-                            <a asp-action="Update"
-                               asp-route-id="@item.Id"
-                               class="btn btn-warning btn-sm">
-                                Sửa
-                            </a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="Update"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-warning btn-sm">
+                                    ✏ Sửa
+                                </a>
 
-                            <a asp-action="Delete"
-                               asp-route-id="@item.Id"
-                               class="btn btn-danger btn-sm">
-                                Xóa
-                            </a>
+                                <a asp-action="Delete"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-danger btn-sm">
+                                    🗑 Xóa
+                                </a>
+                            }
 
                         </div>
 
@@ -76,15 +96,3 @@
     </div>
 
 </div>
-
-
-<style>
-
-    .product-img {
-        height: 200px;
-        width: 100%;
-        object-fit: contain;
-        background: #f5f5f5;
-    }
-
-</style>

@@ -13,7 +13,11 @@
 
     <!-- BANNER -->
     <div class="top-banner">
-        🔥 SIÊU SALE HÔM NAY - GIẢM ĐẾN 50% | MIỄN PHÍ GIAO HÀNG TOÀN QUỐC 🔥
+        <span class="banner-icon">🔥</span>
+        <span class="banner-text">
+            SIÊU SALE HÔM NAY - GIẢM ĐẾN 50% | MIỄN PHÍ GIAO HÀNG TOÀN QUỐC
+        </span>
+        <span class="banner-icon">🔥</span>
     </div>
 
     <!-- NAVBAR -->
@@ -21,10 +25,10 @@
         <nav class="navbar navbar-expand-sm navbar-dark bg-dark shadow">
             <div class="container">
 
-                <a class="navbar-brand fw-bold text-warning"
+                <a class="navbar-brand shop-logo"
                    asp-controller="Home"
                    asp-action="Index">
-                    🛒 Shop Công Nghệ
+                    🛒 <span class="logo-text">Shop Công Nghệ</span>
                 </a>
 
                 <button class="navbar-toggler"
@@ -37,22 +41,6 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
 
                     <ul class="navbar-nav ms-auto">
-
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Home"
-                               asp-action="Index">
-                                Trang chủ
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link"
-                               asp-controller="Home"
-                               asp-action="Privacy">
-                                Chính sách
-                            </a>
-                        </li>
 
                         <partial name="_LoginPartial" />
 

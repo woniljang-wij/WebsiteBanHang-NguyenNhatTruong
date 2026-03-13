@@ -8,7 +8,11 @@
     }
 }
 
-.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus {
     box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
 }
 
@@ -19,9 +23,12 @@ html {
 
 body {
     margin-bottom: 60px;
+    margin: 0;
 }
 
-/* Nút thêm sản phẩm animation */
+/* ===============================
+   NÚT THÊM SẢN PHẨM ANIMATION
+================================ */
 
 .btn-add-product {
     position: relative;
@@ -36,6 +43,7 @@ body {
 }
 
     /* vệt sáng chạy */
+
     .btn-add-product::before {
         content: "";
         position: absolute;
@@ -58,23 +66,79 @@ body {
     }
 }
 
-/* hover */
 .btn-add-product:hover {
     transform: scale(1.05);
 }
 
-/* ===== Banner vàng ===== */
+/* ===============================
+   BANNER VÀNG
+================================ */
 
 .top-banner {
-    background: linear-gradient(90deg,#FFD700,#FFC107,#FFD700);
+    background: linear-gradient(90deg,#ffcc00,#ffd700,#ffcc00);
     text-align: center;
-    font-weight: bold;
     padding: 10px;
+    font-weight: 600;
     font-size: 16px;
     color: #000;
+    position: relative;
+    overflow: hidden;
 }
 
-/* ===== Footer ===== */
+/* icon hai bên */
+
+.banner-icon {
+    margin: 0 10px;
+    font-size: 18px;
+    animation: fireBlink 1.5s infinite alternate;
+}
+
+/* chữ banner */
+
+.banner-text {
+    letter-spacing: 0.5px;
+}
+
+/* hiệu ứng sáng chạy */
+
+.top-banner::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -75%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient( 120deg, transparent, rgba(255,255,255,0.7), transparent );
+    transform: skewX(-25deg);
+    animation: bannerShine 3s infinite;
+}
+
+/* animation */
+
+@keyframes bannerShine {
+    0% {
+        left: -75%;
+    }
+
+    100% {
+        left: 125%;
+    }
+}
+
+/* icon nhấp nháy */
+
+@keyframes fireBlink {
+    from {
+        transform: scale(1);
+    }
+
+    to {
+        transform: scale(1.2);
+    }
+}
+/* ===============================
+   FOOTER
+================================ */
 
 .main-footer {
     background: #000;
@@ -122,28 +186,39 @@ body {
     padding-top: 15px;
 }
 
-/* CARD VIỀN RGB CHẠY */
+/* ===============================
+   PRODUCT CARD
+================================ */
 
 .product-card {
     position: relative;
     border-radius: 12px;
     padding: 3px;
+    border: none;
+    overflow: hidden;
+
+    transition: all 0.3s ease;
     background: linear-gradient( 90deg, red, orange, yellow, lime, cyan, blue, violet, red );
     background-size: 400%;
     animation: borderMove 6s linear infinite;
 }
 
     /* nền card */
+
     .product-card .card-body,
     .product-card img {
         background: white;
     }
 
-.product-card {
-    border: none;
-}
+    /* hover card */
 
-/* animation */
+    .product-card:hover {
+        transform: translateY(-6px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    }
+
+/* animation viền */
+
 @keyframes borderMove {
     0% {
         background-position: 0%;
@@ -154,6 +229,66 @@ body {
     }
 }
 
+/* ===============================
+   IMAGE
+================================ */
+
+/* khung chứa ảnh */
+
+.product-img-box{
+    overflow:hidden;
+    background:#f8f9fa;
+}
+
+/* ảnh */
+
+.product-img{
+    height:220px;
+    width:100%;
+    object-fit:contain;
+    padding:10px;
+    transition:transform 0.35s ease;
+}
+
+/* zoom chỉ ảnh */
+
+.product-card:hover .product-img{
+    transform:scale(1.08);
+}
+
+/* ===============================
+   TITLE
+================================ */
+
+.product-title {
+    font-size: 17px;
+    font-weight: 600;
+    min-height: 45px;
+}
+
+/* ===============================
+   PRICE
+================================ */
+
+.product-price {
+    color: #e53935;
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/* ===============================
+   CATEGORY
+================================ */
+
+.product-category {
+    color: #777;
+    font-size: 14px;
+}
+
+/* ===============================
+   LOGIN / REGISTER BOX
+================================ */
+
 .auth-container {
     max-width: 420px;
     margin: 70px auto;
@@ -162,3 +297,75 @@ body {
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.2);
 }
+
+/* ===== LOGO SHOP ===== */
+
+.shop-logo {
+    font-size: 22px;
+    font-weight: 700;
+    position: relative;
+    overflow: hidden;
+}
+
+/* chữ gradient */
+
+.logo-text {
+    background: linear-gradient( 90deg, #00c6ff, #0072ff, #7f00ff, #ff00cc, #ffb347, #00c6ff );
+    background-size: 400% auto;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: logoGradient 8s linear infinite;
+}
+
+@keyframes logoGradient {
+    0% {
+        background-position: 0% center;
+    }
+
+    100% {
+        background-position: 400% center;
+    }
+}
+
+/* hover nổi lên */
+
+.shop-logo:hover {
+    transform: scale(1.05);
+    transition: 0.3s;
+}
+
+/* số lượng */
+
+.product-quantity {
+    font-size: 14px;
+    color: #555;
+}
+
+/* badge hết hàng */
+
+.badge-out {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ff3b30;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+
+/* badge sắp hết */
+
+.badge-low {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background: #ff9500;
+    color: white;
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+    font-weight: 600;
+}
+

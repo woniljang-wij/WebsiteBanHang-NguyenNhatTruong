@@ -18,7 +18,8 @@ namespace WebsiteBanHang_NguyenNhatTruong.Controllers
             _categoryRepository = categoryRepository;
         }
 
-        // Ai cũng xem được sản phẩm
+        // ================= USER =================
+
         [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
@@ -26,7 +27,6 @@ namespace WebsiteBanHang_NguyenNhatTruong.Controllers
             return View(products);
         }
 
-        // Xem chi tiết cũng không cần login
         [AllowAnonymous]
         public async Task<IActionResult> Display(int id)
         {
@@ -38,8 +38,9 @@ namespace WebsiteBanHang_NguyenNhatTruong.Controllers
             return View(product);
         }
 
-        // Phải đăng nhập mới thêm được
-        [Authorize]
+        // ================= ADMIN =================
+
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Add()
         {
             var categories = await _categoryRepository.GetAllAsync();
@@ -48,7 +49,7 @@ namespace WebsiteBanHang_NguyenNhatTruong.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Add(Product product, IFormFile imageUrl)
         {
             if (ModelState.IsValid)
@@ -68,8 +69,7 @@ namespace WebsiteBanHang_NguyenNhatTruong.Controllers
             return View(product);
         }
 
-        // Update cần login
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
@@ -84,7 +84,7 @@ namespace WebsiteBanHang_NguyenNhatTruong.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Update(int id, Product product, IFormFile imageUrl)
         {
             ModelState.Remove("ImageUrl");
@@ -106,6 +106,7 @@ namespace WebsiteBanHang_NguyenNhatTruong.Controllers
                 existingProduct.Description = product.Description;
                 existingProduct.CategoryId = product.CategoryId;
                 existingProduct.ImageUrl = product.ImageUrl;
+                existingProduct.Quantity = product.Quantity;
 
                 await _productRepository.UpdateAsync(existingProduct);
 
@@ -118,8 +119,7 @@ namespace WebsiteBanHang_NguyenNhatTruong.Controllers
             return View(product);
         }
 
-        // Xóa cần login
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
@@ -131,14 +131,23 @@ namespace WebsiteBanHang_NguyenNhatTruong.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _productRepository.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
 
-        // Hàm lưu ảnh
+        // ================= ACCESS DENIED =================
+
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
+        // ================= SAVE IMAGE =================
+
         private async Task<string> SaveImage(IFormFile image)
         {
             var savePath = Path.Combine("wwwroot/images", image.FileName);
