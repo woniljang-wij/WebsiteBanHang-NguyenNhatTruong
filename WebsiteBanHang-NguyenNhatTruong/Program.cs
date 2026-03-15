@@ -44,6 +44,9 @@ builder.Services.AddSingleton<IEmailSender, EmailSender>();
 builder.Services.AddScoped<IProductRepository, EFProductRepository>();
 builder.Services.AddScoped<ICategoryRepository, EFCategoryRepository>();
 
+// SESSION (PHẢI đặt trước builder.Build)
+builder.Services.AddSession();
+
 var app = builder.Build();
 
 
@@ -62,6 +65,9 @@ app.UseRouting();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+// SESSION MIDDLEWARE
+app.UseSession();
 
 app.MapRazorPages();
 

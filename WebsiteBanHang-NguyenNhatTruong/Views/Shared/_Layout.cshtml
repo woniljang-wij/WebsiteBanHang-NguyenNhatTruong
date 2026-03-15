@@ -1,4 +1,18 @@
-﻿<!DOCTYPE html>
+﻿@using System.Text.Json
+@using WebsiteBanHang_NguyenNhatTruong.Models
+
+@{
+    int cartCount = 0;
+    var session = Context.Session.GetString("cart");
+
+    if (session != null)
+    {
+        var cart = JsonSerializer.Deserialize<List<CartItem>>(session);
+        cartCount = cart.Sum(x => x.Quantity);
+    }
+}
+
+<!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="utf-8" />
@@ -12,89 +26,110 @@
 <body>
 
     <!-- BANNER -->
-    <div class="top-banner">
-        <span class="banner-icon">🔥</span>
-        <span class="banner-text">
-            SIÊU SALE HÔM NAY - GIẢM ĐẾN 50% | MIỄN PHÍ GIAO HÀNG TOÀN QUỐC
-        </span>
-        <span class="banner-icon">🔥</span>
-    </div>
+    @if (ViewContext.RouteData.Values["Controller"]?.ToString() != "Cart")
+    {
+        <div class="top-banner">
+            <span class="banner-icon">🔥</span>
+            <span class="banner-text">
+                SIÊU SALE HÔM NAY - GIẢM ĐẾN 50% | MIỄN PHÍ GIAO HÀNG TOÀN QUỐC
+            </span>
+            <span class="banner-icon">🔥</span>
+        </div>
 
-    <!-- NAVBAR -->
-    <header>
-        <nav class="navbar navbar-expand-sm navbar-dark bg-dark shadow">
-            <div class="container">
+        <!-- NAVBAR -->
+        <header>
+            <nav class="navbar navbar-expand-sm navbar-dark bg-dark shadow">
+                <div class="container">
 
-                <a class="navbar-brand shop-logo"
-                   asp-controller="Home"
-                   asp-action="Index">
-                    🛒 <span class="logo-text">Shop Công Nghệ</span>
-                </a>
+                    <a class="navbar-brand shop-logo"
+                       asp-controller="Home"
+                       asp-action="Index">
+                        🛒 <span class="logo-text">Shop Công Nghệ</span>
+                    </a>
 
-                <button class="navbar-toggler"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+                    <button class="navbar-toggler"
+                            type="button"
+                            data-bs-toggle="collapse"
+                            data-bs-target="#navbarNav">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
 
-                <div class="collapse navbar-collapse" id="navbarNav">
+                    <div class="collapse navbar-collapse" id="navbarNav">
 
-                    <ul class="navbar-nav ms-auto">
+                        <ul class="navbar-nav ms-auto">
 
-                        <partial name="_LoginPartial" />
+                            @if (User.Identity.IsAuthenticated && User.IsInRole("Customer"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link position-relative"
+                                       asp-controller="Cart"
+                                       asp-action="Index">
 
-                    </ul>
+                                        🛒 Giỏ hàng
+
+                                        @if (cartCount > 0)
+                                        {
+                                            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                                                @cartCount
+                                            </span>
+                                        }
+
+                                    </a>
+                                </li>
+                            }
+
+                            <partial name="_LoginPartial" />
+
+                        </ul>
+
+                    </div>
 
                 </div>
-
-            </div>
-        </nav>
-    </header>
+            </nav>
+        </header>
+    }
 
     <!-- NỘI DUNG -->
     <div class="container mt-4">
-        <main role="main" class="pb-3">
+        <main role="main" class="pb-3 flex-grow-1">
             @RenderBody()
         </main>
     </div>
 
     <!-- FOOTER -->
-    <footer class="main-footer">
+    @if (ViewContext.RouteData.Values["Controller"]?.ToString() != "Cart")
+    {
+        <footer class="bg-black text-warning pt-5 pb-3 mt-5">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h4>Website Bán Hàng</h4>
+                        <p>Hệ thống bán sản phẩm công nghệ chất lượng cao.</p>
+                    </div>
 
-        <div class="container footer-container">
+                    <div class="col-md-4">
+                        <h4>Liên kết</h4>
+                        <p>Trang chủ</p>
+                        <p>Sản phẩm</p>
+                        <p>Liên hệ</p>
+                    </div>
 
-            <div class="footer-col">
-                <h4>Website Bán Hàng</h4>
-                <p>
-                    Hệ thống bán sản phẩm công nghệ chất lượng cao.
-                    Giá tốt - Chính hãng - Bảo hành đầy đủ.
-                </p>
+                    <div class="col-md-4">
+                        <h4>Liên hệ</h4>
+                        <p>support@shop.com</p>
+                        <p>0900 000 000</p>
+                        <p>Hồ Chí Minh</p>
+                    </div>
+                </div>
+
+                <hr />
+
+                <div class="text-center">
+                    © 2026 WebsiteBanHang_NguyenNhatTruong
+                </div>
             </div>
-
-            <div class="footer-col">
-                <h4>Liên kết</h4>
-                <ul>
-                    <li><a href="/">Trang chủ</a></li>
-                    <li><a href="#">Sản phẩm</a></li>
-                    <li><a href="#">Liên hệ</a></li>
-                </ul>
-            </div>
-
-            <div class="footer-col">
-                <h4>Liên hệ</h4>
-                <p>📧 support@shop.com</p>
-                <p>📞 0900 000 000</p>
-                <p>📍 Hồ Chí Minh</p>
-            </div>
-
-        </div>
-
-        <div class="footer-bottom">
-            © 2026 WebsiteBanHang_NguyenNhatTruong
-        </div>
-
-    </footer>
+        </footer>
+    }
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>

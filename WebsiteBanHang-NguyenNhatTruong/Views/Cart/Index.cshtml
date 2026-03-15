@@ -1,0 +1,160 @@
+﻿@model List<WebsiteBanHang_NguyenNhatTruong.Models.CartItem>
+
+@{
+    ViewData["Title"] = "Giỏ hàng";
+}
+
+<div class="container mt-4">
+
+    <div class="mb-3">
+        <a asp-controller="Product" asp-action="Index" class="btn btn-outline-secondary">
+            ← Quay lại trang chủ
+        </a>
+    </div>
+
+    <h2 class="mb-4">🛒 Giỏ hàng</h2>
+
+    @if (Model.Count == 0)
+    {
+        <p>Giỏ hàng trống.</p>
+    }
+    else
+    {
+        foreach (var item in Model)
+        {
+            <div class="cart-item card mb-3 p-3 d-flex flex-row align-items-center"
+                 data-price="@item.Product.Price">
+
+                <!-- checkbox -->
+                <div class="me-3">
+                    <input type="checkbox" class="product-check">
+                </div>
+
+                <!-- ảnh -->
+                <div class="me-3">
+                    <img src="@item.Product.ImageUrl"
+                         width="80"
+                         style="object-fit:cover;">
+                </div>
+
+                <!-- thông tin -->
+                <div class="flex-grow-1">
+
+                    <h5>@item.Product.Name</h5>
+
+                    <p class="text-danger fw-bold">
+                        @item.Product.Price.ToString("N0") đ
+                    </p>
+
+                    <!-- tăng giảm -->
+                    <div>
+
+                        <button class="btn btn-sm btn-outline-secondary minus">-</button>
+
+                        <span class="mx-2 quantity">@item.Quantity</span>
+
+                        <button class="btn btn-sm btn-outline-secondary plus">+</button>
+
+                    </div>
+
+                </div>
+
+                <!-- xóa -->
+                <div>
+                    <a asp-action="Remove"
+                       asp-route-id="@item.ProductId"
+                       class="btn btn-danger">
+                        X
+                    </a>
+                </div>
+
+            </div>
+        }
+    }
+
+</div>
+
+<!-- thanh tổng tiền -->
+<div style="
+position:fixed;
+bottom:0;
+left:0;
+width:100%;
+background:#f8f8f8;
+border-top:1px solid #ddd;
+padding:15px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+">
+
+    <div>
+        Tổng tiền: <strong id="totalPrice">0 đ</strong>
+    </div>
+
+    <button class="btn btn-danger">
+        Mua hàng
+    </button>
+
+</div>
+
+<script>
+
+    function updateTotal(){
+
+        let total = 0;
+
+        document.querySelectorAll(".cart-item").forEach(item=>{
+
+            let checkbox = item.querySelector(".product-check");
+
+            if(checkbox.checked){
+
+                let price = parseFloat(item.dataset.price);
+
+                let quantity = parseInt(
+                    item.querySelector(".quantity").innerText
+                );
+
+                total += price * quantity;
+            }
+
+        });
+
+        document.getElementById("totalPrice").innerText =
+            total.toLocaleString('vi-VN') + " đ";
+    }
+
+    document.querySelectorAll(".product-check").forEach(cb=>{
+        cb.addEventListener("change",updateTotal);
+    });
+
+    document.querySelectorAll(".plus").forEach(btn=>{
+        btn.addEventListener("click",function(){
+
+            let quantityEl = this.parentElement.querySelector(".quantity");
+
+            let q = parseInt(quantityEl.innerText);
+
+            quantityEl.innerText = q + 1;
+
+            updateTotal();
+        });
+    });
+
+    document.querySelectorAll(".minus").forEach(btn=>{
+        btn.addEventListener("click",function(){
+
+            let quantityEl = this.parentElement.querySelector(".quantity");
+
+            let q = parseInt(quantityEl.innerText);
+
+            if(q > 1){
+                quantityEl.innerText = q - 1;
+            }
+
+            updateTotal();
+        });
+    });
+
+</script>

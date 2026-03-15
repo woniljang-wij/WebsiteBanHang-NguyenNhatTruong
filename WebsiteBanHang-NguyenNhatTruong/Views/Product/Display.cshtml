@@ -39,15 +39,37 @@
                     @Model.Description
                 </p>
 
-                <div class="mt-4 d-flex gap-2">
+                <div class="mt-4 d-flex gap-2 flex-wrap">
 
+                    @* ADMIN *@
                     @if (User.IsInRole("Admin"))
                     {
-                        <a asp-action="Update" asp-route-id="@Model.Id" class="btn btn-warning">
+                        <a asp-action="Update"
+                           asp-route-id="@Model.Id"
+                           class="btn btn-warning">
                             ✏ Sửa
                         </a>
                     }
 
+                    @* USER *@
+                    @if (!User.IsInRole("Admin"))
+                    {
+                        <a asp-controller="Cart"
+                           asp-action="AddToCart"
+                           asp-route-productId="@Model.Id"
+                           class="btn btn-outline-danger">
+                            🛒 Thêm vào giỏ hàng
+                        </a>
+
+                        <a asp-controller="Cart"
+                           asp-action="BuyNow"
+                           asp-route-id="@Model.Id"
+                           class="btn btn-danger">
+                            Mua ngay
+                        </a>
+                    }
+
+                    @* AI CŨNG THẤY *@
                     <a asp-action="Index"
                        class="btn btn-secondary">
                         ← Quay lại
